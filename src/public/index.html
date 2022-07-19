@@ -1,0 +1,64 @@
+<html lang='en'>
+  <head>
+    <title>Titulo</title>
+    <script src='libraries/p5.min.js'></script>
+    <!-- <script src='libraries/p5.sound.min.js'></script> -->
+  </head>
+  <body>
+    <span id='title'></span>
+    <button onClick='window.location.reload();'>Refresh Page</button>
+
+    <ul id='project-list'>
+
+    </ul>
+
+    <div id='config'></div>
+    <script>
+      const projects = [
+        { id: 'maze', label: 'Maze' },
+        { id: 'triangles', label: 'Triângulos', wip: true },
+        { id: 'p15', label: 'Puzzle 15', wip: true },
+        { id: 'wave-function-collapse', label: 'Wave Function Collapse' },
+        { id: 'ulam-spiral', label: 'Ulam Spiral' },
+      ]
+
+      const params = new URLSearchParams(window.location.search)
+      const project = params.get('project')
+      const selectedProject = projects.find(({ id }) => id === project)
+
+      const ul = document.getElementById('project-list')
+      const title = document.getElementById('title')
+
+      if (selectedProject) {
+        title.innerText = 'Project: ' + selectedProject.label
+
+        projects.forEach((project) => {
+          const li = document.createElement('li')
+          const a = document.createElement('a')
+          a.href = `?project=${project.id}`
+          a.innerText = project.label
+          li.appendChild(a)
+          ul.appendChild(li)
+        })
+
+        const script = document.createElement('script')
+        script.type = 'module'
+        script.src = `../projects/${selectedProject.id}.js`
+        document.body.appendChild(script)
+      } else {
+        if (project) {
+          title.innerText = 'Project not found: ' + project
+        }
+
+        projects.forEach((project) => {
+          const li = document.createElement('li')
+          const a = document.createElement('a')
+          a.href = `?project=${project.id}`
+          a.innerText = project.label
+          li.appendChild(a)
+          ul.appendChild(li)
+        })
+      }
+    </script>
+  </body>
+</html>
